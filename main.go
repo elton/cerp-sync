@@ -1,8 +1,6 @@
 package main
 
 import (
-	"github.com/elton/cerp-sync/api/controllers"
-	"github.com/elton/cerp-sync/config"
 	"github.com/elton/cerp-sync/cron"
 	"github.com/elton/cerp-sync/models"
 	"github.com/elton/cerp-sync/utils/batch"
@@ -22,8 +20,4 @@ func main() {
 	} else {
 		cron.SyncData()
 	}
-
-	var server = controllers.Server{}
-
-	server.Run(config.Config("SERVER_PORT"))
 }
