@@ -14,7 +14,6 @@ import (
 
 // SyncData synchron all the data of shop and order.
 func SyncData() {
-
 	tl, _ := time.LoadLocation("Asia/Shanghai")
 	s := gocron.NewScheduler(tl)
 	_, _ = s.Every(config.Config("SHOP_INTERVAL")).Do(shopTask)
