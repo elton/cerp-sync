@@ -76,40 +76,55 @@ func getShops() (*[]models.Shop, error) {
 // getOrders save all the orders of specified shop.
 func getOrders(shopCode string) error {
 	var (
-		orderDb              models.Order
-		orders, orderCreated *[]models.Order
-		lastUpdateAt         time.Time
-		totalOrder           int
-		err                  error
+		orderDb      models.Order
+		lastUpdateAt time.Time
+		err          error
 	)
 
+	methods := []string{"gy.erp.trade.history.get", "gy.erp.trade.get"}
 	pgSize, _ := strconv.Atoi(config.Config("PAGE_SIZE"))
 
 	if lastUpdateAt, err = orderDb.GetLastUpdatedAt(shopCode); err != nil {
 		return err
 	}
 
-	if totalOrder, err = broker.GetTotalOfOrders(shopCode, lastUpdateAt); err != nil {
+	if err := saveOrders(pgSize, shopCode, methods, lastUpdateAt); err != nil {
 		return err
 	}
 
-	totalPg := totalOrder / pgSize
-	if totalOrder%pgSize != 0 {
-		totalPg = totalPg + 1
-	}
+	return nil
+}
 
-	logger.Info.Printf("Shop(%s): Total Order: %d, page size: %d, total page: %d", shopCode, totalOrder, pgSize, totalPg)
-
-	for i := 0; i < totalPg; i++ {
-		if orders, err = broker.GetOrders(strconv.Itoa(i+1), strconv.Itoa(pgSize), shopCode, lastUpdateAt); err != nil {
+func saveOrders(pgSize int, shopCode string, methods []string, begin time.Time) error {
+	var (
+		orderDb              models.Order
+		orders, orderCreated *[]models.Order
+		totalOrder           int
+		err                  error
+	)
+	for _, method := range methods {
+		if totalOrder, err = broker.GetTotalOfOrders(shopCode, method, begin); err != nil {
 			return err
 		}
 
-		if len(*orders) > 0 {
-			if orderCreated, err = orderDb.SaveAll(orders); err != nil {
+		totalPg := totalOrder / pgSize
+		if totalOrder%pgSize != 0 {
+			totalPg = totalPg + 1
+		}
+
+		logger.Info.Printf("Total Order: %d, page size: %d, total page: %d", totalOrder, pgSize, totalPg)
+
+		for i := 0; i < totalPg; i++ {
+			if orders, err = broker.GetOrders(strconv.Itoa(i+1), strconv.Itoa(pgSize), shopCode, method, begin); err != nil {
 				return err
 			}
-			logger.Info.Printf("Shop (%s): save  %d orders information, page %d of %d\n", shopCode, len(*orderCreated), i+1, totalPg)
+
+			if len(*orders) > 0 {
+				if orderCreated, err = orderDb.SaveAll(orders); err != nil {
+					return err
+				}
+				logger.Info.Printf("Save (shop %s) %d orders information, page %d of %d\n", shopCode, len(*orderCreated), i+1, totalPg)
+			}
 		}
 	}
 	return nil

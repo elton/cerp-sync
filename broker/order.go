@@ -48,6 +48,7 @@ type Order struct {
 	Deliverys            []Delivery `json:"deliverys"`
 	Details              []Detail   `json:"details"`
 	Payments             []Payment  `json:"payments"`
+	Paytime              string     `json:"paytime"`
 	DealTime             string     `json:"dealtime"`
 	CreateTime           string     `json:"createtime"`
 	ModifyTime           string     `json:"modifytime"`
@@ -91,7 +92,7 @@ type Payment struct {
 }
 
 // GetTotalOfOrders returns the total number of all orders.
-func GetTotalOfOrders(shopCode string, startDate time.Time) (int, error) {
+func GetTotalOfOrders(shopCode string, method string, startDate time.Time) (int, error) {
 	err := godotenv.Load()
 	if err != nil {
 		return 0, err
@@ -101,12 +102,12 @@ func GetTotalOfOrders(shopCode string, startDate time.Time) (int, error) {
 
 	request["appkey"] = os.Getenv("appKey")
 	request["sessionkey"] = os.Getenv("sessionKey")
-	request["method"] = "gy.erp.trade.get"
+	request["method"] = method
 	request["shop_code"] = shopCode
 	if !startDate.IsZero() {
 		request["start_date"] = startDate.Format("2006-01-02 15:04:05")
+		request["date_type"] = 3
 	}
-	request["date_type"] = 3
 
 	var responseObject OResponse
 	if err := query(request, &responseObject); err != nil {
@@ -119,7 +120,7 @@ func GetTotalOfOrders(shopCode string, startDate time.Time) (int, error) {
 }
 
 // GetOrders returns a list of all orders form specified shop.
-func GetOrders(pgNum string, pgSize string, shopCode string, startDate time.Time) (*[]models.Order, error) {
+func GetOrders(pgNum string, pgSize string, shopCode string, method string, startDate time.Time) (*[]models.Order, error) {
 	err := godotenv.Load()
 	if err != nil {
 		return nil, err
@@ -135,14 +136,14 @@ func GetOrders(pgNum string, pgSize string, shopCode string, startDate time.Time
 
 	request["appkey"] = os.Getenv("appKey")
 	request["sessionkey"] = os.Getenv("sessionKey")
-	request["method"] = "gy.erp.trade.get"
+	request["method"] = method
 	request["page_no"] = pgNum
 	request["page_size"] = pgSize
 	request["shop_code"] = shopCode
 	if !startDate.IsZero() {
 		request["start_date"] = startDate.Format("2006-01-02 15:04:05")
+		request["date_type"] = 3
 	}
-	request["date_type"] = 3
 
 	var (
 		responseObject OResponse
@@ -235,6 +236,11 @@ func GetOrders(pgNum string, pgSize string, shopCode string, startDate time.Time
 			order.Payments = append(order.Payments, payment)
 		}
 
+		if _order.Paytime != "" && _order.Paytime != "0000-00-00 00:00:00" {
+			if order.Paytime, err = time.ParseInLocation(layout, _order.Paytime, time.Local); err != nil {
+				return nil, err
+			}
+		}
 		if _order.CreateTime != "" && _order.CreateTime != "0000-00-00 00:00:00" {
 			if order.CreateTime, err = time.ParseInLocation(layout, _order.CreateTime, time.Local); err != nil {
 				return nil, err

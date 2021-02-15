@@ -1,0 +1,26 @@
+POST http://v2.api.guanyierp.com/rest/erp_open HTTP/1.1
+cache-control: no-cache 
+content-type: application/json
+
+{
+  "appkey":"158164",
+  "method":"gy.erp.shop.get",
+  "modify_start_date":"2021-02-08 18:38:00",
+  "page_no":"1",
+  "page_size":"20",
+  "sessionkey":"7e30bd8adf7443f79e078dbf853006c7",
+  "sign":"ACE4B27652C6E634308D5C175345BA0D"
+}
+
+###
+POST http://v2.api.guanyierp.com/rest/erp_open HTTP/1.1
+cache-control: no-cache 
+content-type: application/json
+
+{
+  "appkey":"158164",
+  "method":"gy.erp.trade.history.get",
+  "sessionkey":"7e30bd8adf7443f79e078dbf853006c7",
+  "shop_code":"001",
+  "sign":"3DF496DBE0D05A5F673FC28EFE9F9D39"
+}
