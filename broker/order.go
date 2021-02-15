@@ -113,7 +113,7 @@ func GetTotalOfOrders(shopCode string, startDate time.Time) (int, error) {
 		return 0, err
 	}
 
-	logger.Info.Printf("Get %d order information. \n", responseObject.Total)
+	logger.Info.Printf("Shop(%s): Get %d order information. \n", shopCode, responseObject.Total)
 
 	return responseObject.Total, nil
 }
@@ -153,8 +153,6 @@ func GetOrders(pgNum string, pgSize string, shopCode string, startDate time.Time
 	if err := query(request, &responseObject); err != nil {
 		return nil, err
 	}
-
-	logger.Info.Printf("Get %d order information. \n", responseObject.Total)
 
 	for _, _order := range responseObject.Orders {
 		order := models.Order{}

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"runtime"
+
 	"github.com/elton/cerp-sync/cron"
 	"github.com/elton/cerp-sync/models"
 	"github.com/elton/cerp-sync/utils/batch"
@@ -8,6 +10,8 @@ import (
 )
 
 func main() {
+	runtime.GOMAXPROCS(1)
+
 	var shop *models.Shop
 	shops, err := shop.GetAllShops()
 	if err != nil {

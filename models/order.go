@@ -118,6 +118,6 @@ func (o *Order) GetLastUpdatedAt(shopCode string) (time.Time, error) {
 		rtime, err := time.Parse(layout, "0000-00-00 00:00:00")
 		return rtime, err
 	}
-	logger.Info.Printf("Order Last Updated: %v\n", lastUpdateAt)
+	logger.Info.Printf("Shop (%s): Order Last Updated: %v\n", shopCode, lastUpdateAt)
 	return lastUpdateAt, nil
 }
