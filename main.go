@@ -17,7 +17,9 @@ func main() {
 	if len(*shops) <= 0 {
 		batch.InitializeData()
 		cron.SyncData()
+		select {}
 	} else {
 		cron.SyncData()
+		select {}
 	}
 }

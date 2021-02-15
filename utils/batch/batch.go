@@ -33,15 +33,9 @@ func getShops() (*[]models.Shop, error) {
 	var (
 		shop               models.Shop
 		shops, shopCreated *[]models.Shop
-		// layout             string = "2006-01-02 15:04:05"
-		begin time.Time
-		err   error
+		begin              time.Time
+		err                error
 	)
-
-	// begin, err := time.Parse(layout, "0001-01-01 00:00:00")
-	// if err != nil {
-	// 	return nil, err
-	// }
 
 	if shops, err = broker.GetShops("1", "20", begin); err != nil {
 		return nil, err

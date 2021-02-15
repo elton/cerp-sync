@@ -1,19 +1,19 @@
 package cron
 
 import (
-	"os"
 	"strconv"
 	"time"
 
 	"github.com/elton/cerp-sync/broker"
+	"github.com/elton/cerp-sync/config"
 	"github.com/elton/cerp-sync/models"
 	"github.com/elton/cerp-sync/utils/logger"
-	"github.com/joho/godotenv"
 	"github.com/robfig/cron"
 )
 
 // SyncData synchron all the data of shop and order.
 func SyncData() {
+	logger.Info.Println("Begin sync task.")
 	// Sync store information
 	c := cron.New()
 
@@ -26,7 +26,7 @@ func SyncData() {
 	})
 
 	// Sync order information.
-	c.AddFunc("0 */1 * * * ?", func() {
+	c.AddFunc("* */2 * * * ?", func() {
 		var shop models.Shop
 
 		shops, err := shop.GetAllShops()
@@ -83,8 +83,8 @@ func getOrders(shopCode string) error {
 		totalOrder           int
 		err                  error
 	)
-	godotenv.Load()
-	pgSize, _ := strconv.Atoi(os.Getenv("PAGE_SIZE"))
+
+	pgSize, _ := strconv.Atoi(config.Config("PAGE_SIZE"))
 
 	if lastUpdateAt, err = orderDb.GetLastUpdatedAt(shopCode); err != nil {
 		return err

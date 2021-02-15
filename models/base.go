@@ -36,10 +36,10 @@ func init() {
 		// SkipDefaultTransaction:                   true,
 	})
 	if err != nil {
-		fmt.Printf("Cannot connect to %s database", dbDriver)
+		fmt.Printf("Cannot connect to %s database.", dbDriver)
 		log.Fatal("This is the error: ", err)
 	} else {
-		fmt.Printf("We are connected the %s database", dbDriver)
+		fmt.Printf("We are connected the %s database.", dbDriver)
 	}
 
 	// database connection pool settings.
