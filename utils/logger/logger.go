@@ -20,13 +20,6 @@ func init() {
 		log.Fatalln("Faild to open error logger file:", err)
 	}
 
-	//完成后，延迟关闭
-	// defer func() {
-	// 	if err := file.Close(); err != nil {
-	// 		panic(err)
-	// 	}
-	// }()
-
 	mw := io.MultiWriter(os.Stdout, file)
 
 	//自定义日志格式

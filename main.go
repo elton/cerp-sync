@@ -1,6 +1,8 @@
 package main
 
 import (
+	_ "github.com/dimiro1/banner/autoload"
+
 	"github.com/elton/cerp-sync/cron"
 	"github.com/elton/cerp-sync/models"
 	"github.com/elton/cerp-sync/utils/batch"

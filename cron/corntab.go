@@ -18,7 +18,7 @@ func SyncData() {
 	s := gocron.NewScheduler(tl)
 	_, _ = s.Every(config.Config("SHOP_INTERVAL")).Do(shopTask)
 	_, _ = s.Every(config.Config("ORDER_INTERVAL")).Do(orderTask)
-	s.StartAsync()
+	s.StartBlocking()
 }
 
 func shopTask() {
