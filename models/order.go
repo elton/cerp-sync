@@ -13,18 +13,18 @@ type Order struct {
 	ID                   int64          `json:"id" gorm:"unique"`
 	Code                 string         `json:"code" gorm:"primaryKey;size:256;comment:单据编号"`
 	PlatformCode         string         `json:"platform_code" gorm:"size:256;index;comment:平台单号"`
-	OrderTypeName        string         `json:"order_type_name" gorm:"size:256;comment:订单类型"`
-	ShopName             string         `json:"shop_name" gorm:"size:256"`
+	OrderTypeName        string         `json:"order_type_name" gorm:"size:256;index;comment:订单类型"`
+	ShopName             string         `json:"shop_name" gorm:"size:256;index"`
 	ShopCode             string         `json:"shop_code" gorm:"size:256;index"`
 	VIPName              string         `json:"vip_name" gorm:"size:256;column:vip_name;comment:会员名称"`
 	VIPCode              string         `json:"vip_code" gorm:"size:256;column:vip_code;index;comment:会员代码"`
 	VIPRealName          string         `json:"vip_real_name" gorm:"size:256;column:vip_real_name"`
 	AccountStatus        string         `json:"account_status" gorm:"size:256;index"`
-	AccountAmount        float64        `json:"account_amount"`
+	AccountAmount        float64        `json:"account_amount" gorm:"comment:到账金额"`
 	BusinessMan          string         `json:"business_man" gorm:"size:256"`
 	Qty                  int8           `json:"qty"`
-	Amount               float64        `json:"amount"`
-	Payment              float64        `json:"payment"`
+	Amount               float64        `json:"amount" gorm:"comment:订单金额"`
+	Payment              float64        `json:"payment" gorm:"comment:支付金额"`
 	WarehouseName        string         `json:"warehouse_name" gorm:"size:256"`
 	WarehouseCode        string         `json:"warehouse_code" gorm:"size:256"`
 	DeliveryState        int8           `json:"delivery_state" gorm:"index"`

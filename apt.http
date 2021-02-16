@@ -21,6 +21,6 @@ content-type: application/json
   "appkey":"158164",
   "method":"gy.erp.trade.history.get",
   "sessionkey":"7e30bd8adf7443f79e078dbf853006c7",
-  "shop_code":"001",
-  "sign":"3DF496DBE0D05A5F673FC28EFE9F9D39"
+  "shop_code":"002",
+  "sign":"31ADC1AAE4B96459D41CFDF8509A4B3E"
 }
